@@ -22,10 +22,18 @@ impl Clock {
             minutes: self.minutes + minutes,
         }
     }
+
+    fn fmt_number(&self, n: i32) -> String {
+        if -10 < n && n < 10 {
+            format!("0{}", n.to_string())
+        } else {
+            n.to_string()
+        }
+    }
 }
 
 impl Display for Clock {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}:{}", self.hours, self.minutes)
+        write!(f, "{}:{}", self.fmt_number(self.hours), self.fmt_number(self.minutes))
     }
 }
