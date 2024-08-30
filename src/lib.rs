@@ -11,7 +11,7 @@ impl Clock {
     const DAY_IN_MINUTES: i32 = 1440;
 
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let (accurate_hours, accurate_minutes) = Self::parse_data(hours, minutes);
+        let (accurate_hours, accurate_minutes) = Self::parse_data(hours, minutes, None);
 
         Self {
             hours: accurate_hours,
@@ -20,11 +20,14 @@ impl Clock {
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
-        println!("{}", minutes);
+        let (
+            accurate_hours,
+            accurate_minutes
+        ) = Self::parse_data(self.hours, self.minutes, Some(minutes));
 
         Self {
-            hours: self.hours,
-            minutes: self.minutes + minutes,
+            hours: accurate_hours,
+            minutes: accurate_minutes,
         }
     }
 
@@ -36,9 +39,12 @@ impl Clock {
         }
     }
 
-    fn parse_data(hours: i32, minutes: i32) -> (i32, i32) {
-        let total_minutes = (hours * 60) + minutes; // 100
-        let days = total_minutes / Self::DAY_IN_MINUTES; // 0
+    fn parse_data(hours: i32, minutes: i32, extra_minutes: Option<i32>) -> (i32, i32) {
+        let mut total_minutes = (hours * 60) + minutes;
+
+        total_minutes += extra_minutes.unwrap_or_else(|| 0);
+
+        let days = total_minutes / Self::DAY_IN_MINUTES;
 
         let accurate_minutes = total_minutes - (days * Self::DAY_IN_MINUTES);
         let is_back_in_time: bool = match accurate_minutes{
