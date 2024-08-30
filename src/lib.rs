@@ -1,6 +1,7 @@
 use std::fmt;
 use std::fmt::Display;
 
+#[derive(PartialEq, PartialOrd, Debug)]
 pub struct Clock {
     hours: i32,
     minutes: i32,
@@ -11,8 +12,6 @@ impl Clock {
 
     pub fn new(hours: i32, minutes: i32) -> Self {
         let (accurate_hours, accurate_minutes) = Self::parse_data(hours, minutes);
-
-        println!("{}, {}", accurate_hours, accurate_minutes);
 
         Self {
             hours: accurate_hours,
